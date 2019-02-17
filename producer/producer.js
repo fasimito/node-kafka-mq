@@ -1,7 +1,7 @@
 var kafka = require('kafka-node');
 var KeyedMessage = kafka.KeyedMessage;
 var Producer = kafka.Producer;
-var client = new kafka.Client('10.104.185.48:2181');
+var client = new kafka.KafkaClient()
 var producer = new Producer(client);
 console.log('连接kafka中');
 
@@ -15,7 +15,7 @@ class toKafka {
             console.log(3)
         });
         producer.send(payloads, function (err, data) {
-            if (!!err){
+            if (!!err) {
                 console.log(err)
             }
             console.log(data);
