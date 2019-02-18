@@ -1,20 +1,15 @@
 'use strict';
-var ServiceRouter = require('../service-router/serviceRouter.js');
 var toKafka = function () {
     var kafka = require('kafka-node');
     var Consumer = kafka.Consumer;
-    var client = new kafka.Client('10.104.185.48:2181'); //测试
-    var Offset = kafka.Offset;
-    var offset = new Offset(client);
+    var Client = kafka.KafkaClient;
+
+    var client = new Client({ kafaHost: 'localhost:9092' });
+    // var Offset = kafka.Offset;
+    // var offset = new Offset(client);
     console.log('连接kafka中');
     var topics = [{
-        topic: 'DataCloudLevel', partition: 0, offset: 537
-    }, {
-        topic: 'DataCloudLevel', partition: 1, offset: 310
-    }, {
-        topic: 'DataCloudLevel', partition: 2, offset: 20103
-    }, {
-        topic: 'DataCloudLevel', partition: 3, offset: 42055
+        topic: 'DataCloudLevel', partition: 0
     }];
     var options = {
         autoCommit: false,
@@ -32,13 +27,13 @@ var toKafka = function () {
         options
     );
     consumer.on('message', function (message) {
-        var key = message.key.toString();
+        var key = message.key;
         console.log(key);
         if (key != -1) {
             console.log(message);
             try {
-                var msg = JSON.parse(message.value);
-                ServiceRouter.dispatch(key, msg);
+                var msg = message.value;
+                // ServiceRouter.dispatch(key, msg);
             } catch (e) {
                 console.log(e)
             }
